@@ -13,9 +13,6 @@
 */
 
 $config['instagram_path']			= 'instagram/';
-$config['instagram_client_name']	= 'Local Host Testing';
-$config['instagram_client_id']		= '';
-$config['instagram_client_secret']	= '';
 $config['instagram_callback_url']	= 'http://localhost/connections/instagram/callback';
 $config['instagram_website']		= 'http://localhost';
 $config['instagram_description']	= 'Just for me to test on mah local host!';

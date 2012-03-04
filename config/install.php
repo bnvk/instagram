@@ -13,6 +13,28 @@
 */
 
 /* Settings */
+$config['instagram_settings']['widgets'] 			= 'TRUE';
+$config['instagram_settings']['categories'] 		= 'FALSE';
 $config['instagram_settings']['enabled']			= 'TRUE';
 $config['instagram_settings']['comments_per_page']	= '5';
 $config['instagram_settings']['comments_allow']		= 'no';
+
+$config['instagram_settings']['client_name']		= '';
+$config['instagram_settings']['client_id']			= '';
+$config['instagram_settings']['client_secret']		= '';
+
+$config['instagram_settings']['social_login'] 		= 'TRUE';
+$config['instagram_settings']['social_connection'] 	= 'FALSE';
+
+$config['instagram_settings']['login_redirect']		= '';
+$config['instagram_settings']['connections_redirect']= '';
+
+
+/* Sites */
+$config['instagram_sites'][] = array(
+	'url'		=> 'http://instagr.am/', 
+	'module'	=> 'instagram', 
+	'type' 		=> 'remote', 
+	'title'		=> 'Instagram', 
+	'favicon'	=> 'http://instagram.com/static/images/favicon.ico'
+);

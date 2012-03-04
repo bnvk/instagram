@@ -16,6 +16,9 @@ class Api extends Oauth_Controller
 
 		// Settings & Create Folders
 		$settings = $this->installer->install_settings('instagram', config_item('instagram_settings'));
+
+		// Site
+		$site = $this->installer->install_sites(config_item('instagram_sites'));
 	
 		if ($settings == TRUE)
 		{
@@ -27,6 +30,6 @@ class Api extends Oauth_Controller
         }		
 		
 		$this->response($message, 200);
-	} 
+	}
 
 }

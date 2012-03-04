@@ -29,7 +29,8 @@ class Instagram_api {
 	/*
 	 * Variable to hold an insatance of CodeIgniter so we can access CodeIgniter features
 	 */
-	protected $codeigniter_instance;
+	protected $ci;
+	protected $access_token;
 
 	/*
 	 * Create an array of the urls to be used in api calls
@@ -67,20 +68,16 @@ class Instagram_api {
      * Construct function
      * Sets the codeigniter instance variable and loads the lang file
      */
-    function __construct()
+    function __construct($access_token=FALSE)
     {
     	// Set the CodeIgniter instance variable
-    	$this->codeigniter_instance =& get_instance();
+    	$this->ci =& get_instance();
 
     	// Load the Instagram API language file
-    	$this->codeigniter_instance->load->config('instagram');
+    	$this->ci->load->config('instagram');
+    	
+    	$this->access_token = $access_token;
     } 
-    
-    /*
-     * Create a variable to hold the Oauth access token
-     * @var string
-     */
-    public $access_token = FALSE;
     
     /*
      * Function to create the login with Instagram link
@@ -88,7 +85,7 @@ class Instagram_api {
      */
     function instagramLogin()
     {
-    	return 'https://api.instagram.com/oauth/authorize/?client_id=' . $this->codeigniter_instance->config->item('instagram_client_id') . '&redirect_uri=' . $this->codeigniter_instance->config->item('instagram_callback_url') . '&response_type=code';
+    	return 'https://api.instagram.com/oauth/authorize/?client_id=' . config_item('instagram_client_id') . '&redirect_uri=' . config_item('instagram_callback_url') . '&response_type=code';
     }
     
     /*
@@ -118,7 +115,7 @@ class Instagram_api {
 	    // There was issues with some servers not being able to retrieve the data through https
 	    // The config variable is set to TRUE by default. If you have this problem set the config variable to FALSE
 	    // See https://github.com/ianckc/CodeIgniter-Instagram-Library/issues/5 for a discussion on this
-	    curl_setopt($curl_session, CURLOPT_SSL_VERIFYPEER, $this->codeigniter_instance->config->item('instagram_ssl_verify'));
+	    curl_setopt($curl_session, CURLOPT_SSL_VERIFYPEER, config_item('instagram_ssl_verify'));
 		    
 	    // Execute the cURL session
 	    $contents = curl_exec ($curl_session);
@@ -140,8 +137,7 @@ class Instagram_api {
 	function authorize($code)
 	{
 		$authorization_url = 'https://api.instagram.com/oauth/access_token';
-		
-		return $this->__apiCall($authorization_url, "client_id=" . $this->codeigniter_instance->config->item('instagram_client_id') . "&client_secret=" . $this->codeigniter_instance->config->item('instagram_client_secret') . "&grant_type=authorization_code&redirect_uri=" . $this->codeigniter_instance->config->item('instagram_callback_url') . "&code=" . $code);		
+		return $this->__apiCall($authorization_url, "client_id=" . config_item('instagram_client_id') . "&client_secret=" . config_item('instagram_client_secret') . "&grant_type=authorization_code&redirect_uri=" . config_item('instagram_callback_url') . "&code=" . $code);		
 	}
 
 
@@ -152,8 +148,7 @@ class Instagram_api {
      */
     function getPopularMedia()
     {
-    	$popular_media_request_url = 'https://api.instagram.com/v1/media/popular?client_id=' . $this->codeigniter_instance->config->item('instagram_client_id');
-    	
+    	$popular_media_request_url = 'https://api.instagram.com/v1/media/popular?client_id=' . config_item('instagram_client_id');
     	return $this->__apiCall($popular_media_request_url);
     }
     
@@ -167,7 +162,6 @@ class Instagram_api {
     function getUser($user_id)
     {
     	$user_request_url = sprintf($this->api_urls['user'], $user_id, $this->access_token);
-    	
     	return $this->__apiCall($user_request_url);
     }
     
@@ -181,7 +175,6 @@ class Instagram_api {
     function getUserFeed($max = null, $min = null)
     {
     	$user_feed_request_url = sprintf($this->api_urls['user_feed'], $this->access_token, $max, $min);
-    	
     	return $this->__apiCall($user_feed_request_url);
     }
     
@@ -198,7 +191,6 @@ class Instagram_api {
     function getUserRecent($user_id, $max_id = null, $min_id = null, $max_timestamp = null, $min_timestamp = null)
     {
     	$user_recent_request_url = sprintf($this->api_urls['user_recent'], $user_id, $this->access_token, $max_id, $min_id, $max_timestamp, $min_timestamp);
-    	
     	return $this->__apiCall($user_recent_request_url);
     }
     
@@ -211,7 +203,6 @@ class Instagram_api {
     function userSearch($user_name)
     {
     	$user_search_request_url = sprintf($this->api_urls['user_search'], $user_name, $this->access_token);
-    	
     	return $this->__apiCall($user_search_request_url);
     }
     
@@ -224,7 +215,6 @@ class Instagram_api {
     function userFollows($user_id)
     {
     	$user_follows_request_url = sprintf($this->api_urls['user_follows'], $user_id, $this->access_token);
-    	
     	return $this->__apiCall($user_follows_request_url);
     }
     
@@ -237,7 +227,6 @@ class Instagram_api {
     function userFollowedBy($user_id)
     {
     	$user_followed_by_request_url = sprintf($this->api_urls['user_followed_by'], $user_id, $this->access_token);
-    	
     	return $this->__apiCall($user_followed_by_request_url);
     }
     
@@ -249,7 +238,6 @@ class Instagram_api {
     function userRequestedBy()
     {
     	$user_requested_by_request_url = sprintf($this->api_urls['user_requested_by'], $this->access_token);
-    	
     	return $this->__apiCall($user_requested_by_request_url);
     }
     
@@ -260,8 +248,7 @@ class Instagram_api {
      */
     function userRelationship($user_id)
     {
-    	$user_relationship_request_url = sprintf($this->api_urls['user_relationship'], $user_id, $this->access_token);
-    	
+    	$user_relationship_request_url = sprintf($this->api_urls['user_relationship'], $user_id, $this->access_token);    	
     	return $this->__apiCall($user_relationship_request_url);
     }
     
@@ -274,7 +261,6 @@ class Instagram_api {
     function modifyUserRelationship($user_id, $action)
     {
     	$user_modify_relationship_request_url = sprintf($this->api_urls['modify_user_relationship'], $user_id, $action, $this->access_token);
-    	
     	return $this->__apiCall($user_modify_relationship_request_url);
     }
     
@@ -287,7 +273,6 @@ class Instagram_api {
     function getMedia($media_id)
     {
     	$media_request_url = sprintf($this->api_urls['media'], $media_id, $this->access_token);
-    	
     	return $this->__apiCall($media_request_url);
     }
     
@@ -304,7 +289,6 @@ class Instagram_api {
     function mediaSearch($latitude = null, $longitude = null, $max_timestamp = null, $min_timestamp = null, $distance = null)
     {
     	$media_search_request_url = sprintf($this->api_urls['media_search'], $latitude, $longitude, $max_timestamp, $min_timestamp, $distance, $this->access_token);
-    	
     	return $this->__apiCall($media_search_request_url);
     }
     
@@ -315,7 +299,6 @@ class Instagram_api {
     function popularMedia()
     {
     	$popular_media_request_url = sprintf($this->api_urls['media_popular'], $this->access_token);
-    	
     	return $this->__apiCall($popular_media_request_url);
     }
     
@@ -327,7 +310,6 @@ class Instagram_api {
     function mediaComments($media_id)
     {
     	$media_comments_request_url = sprintf($this->api_urls['media_comments'], $media_id, $this->access_token);
-    	
     	return $this->__apiCall($media_comments_request_url);
     }
     
@@ -354,7 +336,6 @@ class Instagram_api {
     function deleteMediaComment($media_id, $comment_id)
     {
     	$delete_media_comment_url = sprintf($this->api_urls['delete_media_comment'], $media_id, $this->access_token);
-    	
     	return $this->__apiCall($delete_media_comment_url);
     }
     
@@ -366,7 +347,6 @@ class Instagram_api {
     function mediaLikes($media_id)
     {
     	$media_likes_request_url = sprintf($this->api_urls['likes'], $media_id, $this->access_token);
-    	
     	return $this->__apiCall($media_likes_request_url);
     }
     
@@ -378,7 +358,6 @@ class Instagram_api {
     function postLike($media_id)
     {
         $post_media_like_request_url = sprintf($this->api_urls['post_like'], $media_id, $this->access_token);
-    	
     	return $this->__apiCall($post_media_like_request_url);
     }
 
@@ -390,7 +369,6 @@ class Instagram_api {
     function removeLike($media_id)
     {
     	$remove_like_request_url = sprintf($this->api_urls['remove_like'], $media_id, $this->access_token);
-    	
     	return $this->__apiCall($remove_like_request_url);
     }
     
@@ -402,7 +380,6 @@ class Instagram_api {
     function getTags($tag)
     {
     	$tags_request_url = sprintf($this->api_urls['tags'], $tag, $this->access_token);
-    	
     	return $this->__apiCall($tags_request_url);
     }
     
@@ -416,7 +393,6 @@ class Instagram_api {
     function tagsRecent($tag, $max_id = null, $min_id = null)
     {
     	$tags_recent_request_url = sprintf($this->api_urls['tags_recent'], $tag, $max_id, $min_id, $this->access_token);
-    	
     	return $this->__apiCall($tags_recent_request_url);
     }
     
@@ -428,7 +404,6 @@ class Instagram_api {
     function tagsSearch($tag)
     {
     	$tags_search_request_url = sprintf($this->api_urls['tags_search'], $tag, $this->access_token);
-    	
     	return $this->__apiCall($tags_search_request_url);
     }
     
@@ -440,7 +415,6 @@ class Instagram_api {
     function getLocation($location)
     {
     	$location_request_url = sprintf($this->api_urls['locations'], $location, $this->access_token);
-    	
     	return $this->__apiCall($location_request_url);
     }
     
@@ -456,7 +430,6 @@ class Instagram_api {
     function locationRecent($location, $max_id = null, $min_id = null, $max_timestamp = null, $min_timestamp = null)
     {
     	$location_recent_request_url = sprintf($this->api_urls['locations_recent'], $location, $max_id, $min_id, $max_timestamp, $min_timestamp, $this->access_token);
-    	
     	return $this->__apiCall($location_recent_request_url);    
     }
     
@@ -471,7 +444,6 @@ class Instagram_api {
     function locationSearch($latitude = null, $longitude = null, $foursquare_id = null, $distance = null)
     {
     	$location_search_request_url = sprintf($this->api_urls['locations_search'], $latitude, $longitude, $foursquare_id, $distance, $this->access_token);
-    	
     	return $this->__apiCall($location_search_request_url);
     }
 
