@@ -10,7 +10,17 @@ class Home extends Dashboard_Controller
 		$this->module_site		= $this->social_igniter->get_site_view_row('module', 'instagram');		
 		$this->check_connection = $this->social_auth->check_connection_user($this->session->userdata('user_id'), 'instagram', 'primary');
 
-		$this->load->library('instagram_api', $this->check_connection->auth_one);
+		// Kinda Kludgy (user not setup) Redirect
+		if (!$this->check_connection)
+		{	
+			$this->session->set_flashdata('message', 'Please connect your Instagram account before using the app');			
+		
+			redirect(base_url().'settings/connections');
+		}
+		else
+		{
+			$this->load->library('instagram_api', $this->check_connection->auth_one);
+		}
 
 		$this->data['page_title'] = 'Instagram';
 	}
@@ -22,9 +32,6 @@ class Home extends Dashboard_Controller
 		$this->data['sub_title'] = 'Friends Pictures';
 		
 		$feed = $this->instagram_api->getUserFeed();
-		
-//		echo '<pre>';
-//		print_r($feed);
 
 		$this->data['feed'] = $feed;		
 	

@@ -85,7 +85,7 @@ class Instagram_api {
      */
     function instagramLogin()
     {
-    	return 'https://api.instagram.com/oauth/authorize/?client_id=' . config_item('instagram_client_id') . '&redirect_uri=' . config_item('instagram_callback_url') . '&response_type=code';
+    	return 'https://api.instagram.com/oauth/authorize/?client_id=' . config_item('instagram_client_id') . '&redirect_uri=' . base_url().config_item('instagram_callback_url') . '&response_type=code';
     }
     
     /*
@@ -137,7 +137,7 @@ class Instagram_api {
 	function authorize($code)
 	{
 		$authorization_url = 'https://api.instagram.com/oauth/access_token';
-		return $this->__apiCall($authorization_url, "client_id=" . config_item('instagram_client_id') . "&client_secret=" . config_item('instagram_client_secret') . "&grant_type=authorization_code&redirect_uri=" . config_item('instagram_callback_url') . "&code=" . $code);		
+		return $this->__apiCall($authorization_url, "client_id=" . config_item('instagram_client_id') . "&client_secret=" . config_item('instagram_client_secret') . "&grant_type=authorization_code&redirect_uri=" . base_url().config_item('instagram_callback_url') . "&code=" . $code);		
 	}
 
 

@@ -56,40 +56,45 @@ class Connections extends MY_Controller
 		{
 			// Get Access Token
 			$instagram_user = $this->instagram_api->authorize($_REQUEST['code']);
-				
-			// Check & Add
-			if ($check_connection = $this->social_auth->check_connection_user_id($instagram_user->user->id, "instagram"))
+
+			if (isset($instagram_user->access_token))
 			{
-			 	$this->session->set_flashdata('message', 'This Instagram account is already connected to another user');
-			 	redirect(connections_redirect(config_item('instagram_connections_redirect')), 'refresh');
+				// Check & Add
+				if ($check_connection = $this->social_auth->check_connection_user_id($instagram_user->user->id, "instagram"))
+				{
+				 	$this->session->set_flashdata('message', 'This Instagram account is already connected to another user');
+				 	redirect(connections_redirect(config_item('instagram_connections_redirect')), 'refresh');
+				}
+				else
+				{	
+					// Check for New User
+				
+						
+					// Add Connection
+			   		$connection_data = array(
+			   			'site_id'				=> $this->module_site->site_id,
+			   			'user_id'				=> $this->session->userdata('user_id'),
+			   			'module'				=> 'instagram',
+			   			'type'					=> 'primary',
+			   			'connection_user_id'	=> $instagram_user->user->id,
+			   			'connection_username'	=> $instagram_user->user->username,
+			   			'auth_one'				=> $instagram_user->access_token
+			   		);
+	
+					$connection = $this->social_auth->add_connection($connection_data);
+	
+					$this->social_auth->set_userdata_connections($this->session->userdata('user_id'));
+	
+					$this->session->set_flashdata('message', 'Instagram account connected');
+	
+				 	redirect(connections_redirect(config_item('instagram_connections_redirect')), 'refresh');
+		
+				}
 			}
 			else
-			{	
-				// Check for New User
-			
-					
-				// Add Connection
-		   		$connection_data = array(
-		   			'site_id'				=> $this->module_site->site_id,
-		   			'user_id'				=> $this->session->userdata('user_id'),
-		   			'module'				=> 'instagram',
-		   			'type'					=> 'primary',
-		   			'connection_user_id'	=> $instagram_user->user->id,
-		   			'connection_username'	=> $instagram_user->user->username,
-		   			'auth_one'				=> $instagram_user->access_token
-		   		);
-
-				$connection = $this->social_auth->add_connection($connection_data);
-
-				$this->social_auth->set_userdata_connections($this->session->userdata('user_id'));
-
-				$this->session->set_flashdata('message', 'Instagram account connected');
-
-			 	redirect(connections_redirect(config_item('instagram_connections_redirect')), 'refresh');
-	
-			}
-
-		
+			{
+				$this->session->set_flashdata('message', 'Oops, something went awry with Instagram');			
+			}		
 		}
 		
 		/* DataModel from $this->instagram_api->authorize(); 

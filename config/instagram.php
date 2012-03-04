@@ -13,9 +13,7 @@
 */
 
 $config['instagram_path']			= 'instagram/';
-$config['instagram_callback_url']	= 'http://localhost/connections/instagram/callback';
-$config['instagram_website']		= 'http://localhost';
-$config['instagram_description']	= 'Just for me to test on mah local host!';
+$config['instagram_callback_url']	= 'connections/instagram/callback';
 
 // There was issues with some servers not being able to retrieve the data through https
 // If you have this problem set the following to FALSE 
