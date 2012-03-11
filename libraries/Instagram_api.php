@@ -1,5 +1,4 @@
 <?php
-
 /**
  * CodeIgniter Instagram Library by Ian Luckraft	http://ianluckraft.co.uk	ian@ianluckraft.co.uk
  * This program is free software; you can redistribute it and/or modify
@@ -46,6 +45,7 @@ class Instagram_api {
         'user_followed_by'			=> 'https://api.instagram.com/v1/users/%s/followed-by?access_token=%s',
         'user_requested_by'			=> 'https://api.instagram.com/v1/users/self/requested-by?access_token=%s',
         'user_relationship'			=> 'https://api.instagram.com/v1/users/%s/relationship?access_token=%s',
+	 	'user_liked'				=> 'https://api.instagram.com/v1/users/self/media/liked?access_token=%s',
         'modify_user_relationship'	=> 'https://api.instagram.com/v1/users/%s/relationship?action=%s&access_token=%s',
         'media'						=> 'https://api.instagram.com/v1/media/%d?access_token=%s',
         'media_search'				=> 'https://api.instagram.com/v1/media/search?lat=%s&lng=%s&max_timestamp=%s&min_timestamp=%s&distance=%s&access_token=%s',
@@ -193,6 +193,24 @@ class Instagram_api {
     	$user_recent_request_url = sprintf($this->api_urls['user_recent'], $user_id, $this->access_token, $max_id, $min_id, $max_timestamp, $min_timestamp);
     	return $this->__apiCall($user_recent_request_url);
     }
+
+
+    /*
+     * Function to get a users recent published media
+     * Accepts a user id and access token and optional max id, min id, max timestamp and min timestamp
+     * @param int Instagram user id
+     * @param int return media after max id
+     * @param int return media before min id
+     * @param int return media after this UNIX timestamp
+     * @param int return media before this UNIX timestamp
+     * @return std_class of media found based on parameters given
+     */
+    function getUserLiked()
+    {
+    	$user_liked_request_url = sprintf($this->api_urls['user_liked'], $this->access_token);
+    	return $this->__apiCall($user_liked_request_url);
+    }
+
     
     /*
      * Function to search for user

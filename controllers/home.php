@@ -50,4 +50,18 @@ class Home extends Dashboard_Controller
 	
 		$this->render();
 	}
+
+	function likes()
+	{
+		if (!$this->check_connection) redirect(base_url().'settings/app');	
+	
+		$this->data['sub_title'] = 'Your Likes';
+		
+		$feed = $this->instagram_api->getUserLiked();
+
+
+		$this->data['feed'] = $feed;		
+	
+		$this->render();
+	}
 }
