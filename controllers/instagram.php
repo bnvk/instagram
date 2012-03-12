@@ -13,9 +13,7 @@ class Instagram extends Site_Controller
 		$this->data['page_title'] = 'Instagram';
 		
 		// Gets feed I see of ppl I follow 
-		// $feed = $this->instagram_api->getUserFeed();	
-		
-		
+		// $feed = $this->instagram_api->getUserFeed();
 		//$this->render();	
 	}
 
