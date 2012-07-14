@@ -19,16 +19,14 @@ $config['instagram_settings']['enabled']			= 'TRUE';
 $config['instagram_settings']['comments_per_page']	= '5';
 $config['instagram_settings']['comments_allow']		= 'no';
 
-$config['instagram_settings']['client_name']		= '';
 $config['instagram_settings']['client_id']			= '';
 $config['instagram_settings']['client_secret']		= '';
 
 $config['instagram_settings']['social_login'] 		= 'TRUE';
-$config['instagram_settings']['social_connection'] 	= 'FALSE';
+$config['instagram_settings']['social_connection'] 	= 'TRUE';
 
-$config['instagram_settings']['login_redirect']		= '';
-$config['instagram_settings']['connections_redirect']= '';
-
+$config['instagram_settings']['login_redirect']		= 'home/';
+$config['instagram_settings']['connections_redirect']= 'settings/connections/';
 
 /* Sites */
 $config['instagram_sites'][] = array(

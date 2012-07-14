@@ -6,15 +6,27 @@
 		<p><?= form_dropdown('enabled', config_item('enable_disable'), $settings['instagram']['enabled']) ?></p>
 		<p><a href="<?= base_url() ?>api/<?= $this_module ?>/uninstall" id="app_uninstall" class="button_delete">Uninstall</a></p>
 	</div>
-	
-	<h3>Application Keys</h3>
 
-	<p>Instagram requires <a href="http://instagram.com/developer/" target="_blank">registering your application</a></p>
-				
-	<p><input type="text" name="client_name" value="<?= $settings['instagram']['client_name'] ?>"> App Name</p>
+	<h3>Application Setup</h3>
+
+	<p>Instagram requires <a href="http://instagram.com/developer/" target="_blank">registering your application</a>, when prompted enter the following values:</p>
+	<table>
+	<tr>
+		<td><strong>Application Name</strong>:</td>
+		<td><?= config_item('site_title') ?></td>
+	</tr>
+	<tr>
+		<td><strong>Website</strong>:</td>
+		<td><?= base_url() ?></td>
+	</tr>
+	<tr>	
+		<td><strong>OAuth redirect_uri</strong>:</td>
+		<td><?= base_url() ?>connections/instagram/callback</td>
+	</tr>
+	</table>
+	<p>You will then be provided with the following:</p>
 	<p><input type="text" name="client_id" value="<?= $settings['instagram']['client_id'] ?>"> Client ID </p> 
 	<p><input type="text" name="client_secret" value="<?= $settings['instagram']['client_secret'] ?>"> Client Secret</p>
-	
 	
 </div>
 <span class="item_separator"></span>
@@ -38,22 +50,6 @@
 	<p>Connections Redirect<br>
 	<?= base_url() ?> <input type="text" size="30" name="connections_redirect" value="<?= $settings['instagram']['connections_redirect'] ?>" />
 	</p>	
-
-</div>
-
-<span class="item_separator"></span>
-
-<div class="content_wrap_inner">
-			
-	<h3>Comments</h3>	
-
-	<p>Allow
-	<?= form_dropdown('module_allow', config_item('yes_or_no'), $settings['instagram']['comments_allow']) ?>
-	</p>
-
-	<p>Comments Per-Page
-	<?= form_dropdown('module_per_page', config_item('amount_increments_five'), $settings['instagram']['comments_per_page']) ?>
-	</p>
 
 	<input type="hidden" name="module" value="<?= $this_module ?>">
 

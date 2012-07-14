@@ -64,4 +64,15 @@ class Home extends Dashboard_Controller
 	
 		$this->render();
 	}
+	
+	function search()
+	{
+		
+		$search = $this->instagram_api->tagsRecent($this->uri->segment(4));
+
+		echo '<pre>';
+		print_r($search);
+		
+	}
+	
 }
