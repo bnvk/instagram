@@ -11,4 +11,16 @@
 * Description: 	Widgets in core install of Social Igniter Instagram App
 */
 
-$config['instagram_widgets'] = FALSE;
+$config['instagram_widgets'][] = array(
+	'regions'	=> array('sidebar','content','wide'),
+	'widget'	=> array(
+		'module'	=> 'instagram',
+		'name'		=> 'Recent Pictures',
+		'method'	=> 'run',
+		'path'		=> 'widgets_recent_pictures',
+		'multiple'	=> 'FALSE',
+		'order'		=> '1',
+		'title'		=> 'Recent Pictures',
+		'content'	=> ''
+	)
+);
