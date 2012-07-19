@@ -74,7 +74,7 @@ class Instagram_api {
     	$this->ci =& get_instance();
 
     	// Load the Instagram API language file
-    	$this->ci->load->config('instagram');
+    	$this->ci->load->config('instagram/instagram');
     	
     	$this->access_token = $access_token;
     } 
